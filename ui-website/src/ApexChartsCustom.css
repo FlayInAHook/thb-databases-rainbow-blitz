@@ -1,0 +1,7 @@
+.apexcharts-tooltip {
+  background: rgba(24,25,36, 0.8) !important; /*rgba(var(--chakra-colors-chakra-body-bg), 1) !important;*/
+}
+
+.apexcharts-xaxistooltip {
+  background: rgba(24,25,36, 0.9) !important; /*rgba(var(--chakra-colors-chakra-body-bg), 1) !important;*/
+}
