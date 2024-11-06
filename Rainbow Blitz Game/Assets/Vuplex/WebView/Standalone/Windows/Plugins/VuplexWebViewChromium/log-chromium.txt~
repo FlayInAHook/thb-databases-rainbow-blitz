@@ -1,0 +1,115 @@
+[0605/233007.982:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(130,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0605/233010.993:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(139,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0605/233011.054:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0605/233012.984:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0605/233012.984:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0605/233013.033:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0605/233028.485:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0605/233034.911:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0605/233040.705:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(130,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0605/233043.770:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0605/233043.809:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(139,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0605/233046.280:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/155016.006:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0618/155046.460:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0618/155136.591:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0618/165617.558:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/165906.522:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/170052.961:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/171956.007:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/172226.059:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/172524.665:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/173447.991:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/173530.007:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/173555.528:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/173752.727:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/180210.920:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/180329.434:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/191851.405:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/192330.085:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/192842.980:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/193106.996:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/194612.522:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/195047.927:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/195209.810:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/195233.142:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/195544.774:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/195704.746:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/201235.967:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/201448.161:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/201520.975:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/201651.844:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/234538.302:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/235324.022:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0618/235354.040:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0619/000036.242:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0619/000215.944:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0619/000900.775:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0619/000928.001:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/210923.822:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/212023.808:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/212047.415:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/212418.030:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/212510.135:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/213111.522:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0623/213120.971:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0623/213135.719:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0623/221325.380:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0623/222010.930:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/000030.234:WARNING:alloy_browser_main.cc(156)] Unhandled app relaunch; implement CefBrowserProcessHandler::OnAlreadyRunningAppRelaunch.
+[0624/000206.919:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0624/142617.097:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/142832.522:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0624/142832.522:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0624/143701.032:WARNING:frame_impl.cc(431)] virtual CefFrameImpl::SendProcessMessage sent to detached frame 5-AE246D6199DA3720B62E2AF19A2A2269 will be ignored
+[0624/143701.038:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0624/143701.038:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0624/143701.254:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/201144.447:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/205421.964:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/213802.150:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/214200.764:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/215157.785:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/215719.587:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/221048.648:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/224330.094:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/224647.518:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/230310.785:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/230442.481:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/230506.507:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/230706.335:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/230751.430:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/231025.594:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/231250.255:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0624/231820.426:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0706/202535.938:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0706/205850.490:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0706/210542.719:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0707/002841.934:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0707/120712.707:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0707/123507.200:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0712/221444.075:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0713/225156.252:WARNING:spdy_session.cc(2979)] Received HEADERS for invalid stream 5
+[0713/232648.202:WARNING:spdy_session.cc(2979)] Received HEADERS for invalid stream 511
+[0715/003255.137:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 6
+[0715/003316.451:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(139,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0715/003316.485:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(130,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0715/003319.904:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
