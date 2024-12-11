@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { customColorModeAtom, requestUniqueID, UnityMessage } from './Datastorage';
+import { customColorModeAtom, fetchUser, requestUniqueID, UnityMessage, userAtom } from './Datastorage';
 
 
 function sendMessageToUnity(message: object) {
@@ -22,6 +22,8 @@ const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [uniqueID, setUniqueID] = useState<string>("");
+  const [user, setUser] = useAtom(userAtom)
+  const [userWasFetched, setUserWasFetched] = useState<boolean>(false);
 
   useEffect(() => {
     if (!window.vuplex) {
@@ -41,6 +43,16 @@ const SettingsPage: React.FC = () => {
     if (vantaEffect) return;
       //setVantaEffect(CLOUDS({...vantaConfig, el: backgroundRef.current}));
   }, [backgroundRef]);
+
+  useEffect(() => {
+    if (!uniqueID) return;
+    fetchUser(uniqueID).then((user) => {
+      setUser(Object.keys(user).length === 0 ? null : user);
+      setUserWasFetched(true);
+    });
+  }, [uniqueID]);
+
+
 
   function handleUnityMessage(_event: any) {
     //console.log("Unity Message", _event);
