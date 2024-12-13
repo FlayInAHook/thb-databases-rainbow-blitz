@@ -2,6 +2,7 @@ using UnityEngine;
 using System.IO;
 using System;
 using System.Text;
+using System.Data.Common;
 
 public class PlayerPositionLogger : MonoBehaviour, IDisposable
 {
@@ -13,8 +14,14 @@ public class PlayerPositionLogger : MonoBehaviour, IDisposable
         {
             LogStream = File.OpenWrite(logFilePath);
         }
+        SB = new();
     }
     FileStream LogStream;
+    StringBuilder SB;
+
+    [SerializeField]
+    public MonoBehaviour DatabasePosterBehaviour;
+    private IDatabasePoster DatabasePoster => DatabasePosterBehaviour as IDatabasePoster;
 
     public float logInterval = 0.1f; // Interval in seconds
     private float nextLogTime = 0f;
@@ -32,12 +39,27 @@ public class PlayerPositionLogger : MonoBehaviour, IDisposable
     {
         Vector3 position = transform.position;
         Quaternion orientation = transform.rotation;
-        var logLine = $"{Time.time} {position.x} {position.y} {position.z} {orientation.x} {orientation.y} {orientation.z} {orientation.w}\n";
+        var logLine = $"{Time.time} {position.x} {position.y} {position.z} {orientation.x} {orientation.y} {orientation.z} {orientation.w}";
+        SB.AppendLine(logLine);
         LogStream?.Write(Encoding.UTF8.GetBytes(logLine).AsSpan());
+        LogStream?.Write(NewLineBytes);
     }
+
+    byte[] NewLineBytes = Encoding.UTF8.GetBytes("\n");
 
     void IDisposable.Dispose()
     {
         LogStream?.Close();
+        if (false)//DatabasePoster is { })
+        {
+            // keine ahnung, wie man das in die DB bekommt - es sieht nicht so aus, als würde irgendwas die dbConnection verwenden.
+            DatabasePoster.PostDbMessage(@$"{{
+    ""TraceInfo"":
+    {{
+    ""Level"":""{ DatabasePoster.LevelName}"",
+    ""Log"":""{SB}""
+    }}
+}}");
+        }
     }
 }

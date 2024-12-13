@@ -7,7 +7,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UIElements.InputSystem;
 using Vuplex.WebView;
 
-public class LevelManager : MonoBehaviour
+public interface IDatabasePoster
+{
+    void PostDbMessage(string message);
+    string LevelName { get; }
+}
+
+public class LevelManager : MonoBehaviour, IDatabasePoster
 {
     
     GameObject hotbarContainer;
@@ -50,15 +56,17 @@ public class LevelManager : MonoBehaviour
 
     const int updatesToWait = 3;
 
+    private bool IsIngameOverlay => webViewPrefab.WebView.Url.Contains("ingameoverlay");
+
     // Update is called once per frame
     void Update()
     {
         // if the f key is pressed, reload the scene
-        if (!ingameOverlay.activeSelf && Input.GetKeyDown(KeyCode.F) && webViewPrefab.WebView.Url.Contains("ingameoverlay"))
+        if (!ingameOverlay.activeSelf && Input.GetKeyDown(KeyCode.F) && IsIngameOverlay)
         {
           OnRestart();
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && webViewPrefab.WebView.Url.Contains("ingameoverlay"))
+        if (Input.GetKeyDown(KeyCode.Escape) && IsIngameOverlay)
         {
             onEscape();
         }
@@ -78,7 +86,7 @@ public class LevelManager : MonoBehaviour
         {
           restartSpace = true;  
         }
-        if (updates == updatesToWait && !spaceWasHeld && Input.GetKeyUp(KeyCode.Space) && restartSpace && webViewPrefab.WebView.Url.Contains("ingameoverlay"))
+        if (updates == updatesToWait && !spaceWasHeld && Input.GetKeyUp(KeyCode.Space) && restartSpace && IsIngameOverlay)
         {
             restartSpace = false;
             ingameOverlay.SetActive(false);
@@ -90,7 +98,7 @@ public class LevelManager : MonoBehaviour
         }
 
         if (updates == updatesToWait - 1){
-           webViewPrefab.WebView.PostMessage("{\"type\": \"LEVEL_ID\", \"data\": {\"levelID\": \"" + StaticInfo.GetLevelID(SceneManager.GetActiveScene().name) + "\"}}");
+           PostDbMessage("{\"type\": \"LEVEL_ID\", \"data\": {\"levelID\": \"" + StaticInfo.GetLevelID(SceneManager.GetActiveScene().name) + "\"}}");
         }
         
         if (updates < updatesToWait){
@@ -103,14 +111,16 @@ public class LevelManager : MonoBehaviour
         canMove = false;
         ingameOverlay.SetActive(true);
         hotbarContainer.SetActive(false);
-        webViewPrefab.WebView.PostMessage("{\"type\": \"OPEN_ESCAPE_MENU\"}");
+        PostDbMessage("{\"type\": \"OPEN_ESCAPE_MENU\"}");
         Debug.Log("Escape pressed");
         // unlock the cursor
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    
+    public void PostDbMessage(string message) => webViewPrefab.WebView.PostMessage(message);
+
+    public string LevelName => SceneManager.GetActiveScene().name;
     public void onResume(){
         canMove = true;
         ingameOverlay.SetActive(false);
@@ -122,14 +132,14 @@ public class LevelManager : MonoBehaviour
     public void OnFinished()
     { 
       Reload();
-      webViewPrefab.WebView.PostMessage("{\"type\": \"FINISHED_LEVEL\", \"data\": {\"time\":\"" + timerDisplay.GetElapsedTime().ToString("F3").Replace(",", "") + "\"" +
+      PostDbMessage("{\"type\": \"FINISHED_LEVEL\", \"data\": {\"time\":\"" + timerDisplay.GetElapsedTime().ToString("F3").Replace(",", "") + "\"" +
                                         ",\"levelID\": \"" + StaticInfo.GetLevelID(SceneManager.GetActiveScene().name) + "\"}}");
     }
 
     public void OnRestart()
     {
         Reload();
-        webViewPrefab.WebView.PostMessage("{\"type\": \"RESTART_LEVEL\"}");
+        PostDbMessage("{\"type\": \"RESTART_LEVEL\"}");
     }
 
 
