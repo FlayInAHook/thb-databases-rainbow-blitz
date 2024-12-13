@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 //import CLOUDS from 'vanta/dist/vanta.clouds.min';
-import { customColorModeAtom, requestUniqueID, UnityMessage,} from './Datastorage';
+import { API_URL, customColorModeAtom, fetchUser, registerUser, requestUniqueID, UnityMessage, userAtom } from './Datastorage';
 import { sensitivityAtom } from './SettingsPage';
 
 
@@ -22,7 +22,16 @@ const MainPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [uniqueID, setUniqueID] = useState<string>("");
+  const [user, setUser] = useAtom(userAtom)
+  const [userWasFetched, setUserWasFetched] = useState<boolean>(false);
 
+  const clearCache = useCallback(async () => {
+    const version = localStorage.getItem('version')
+    const currentVersion = await fetch(API_URL + '/version').then((res) => res.text())
+    if (version === currentVersion) return
+  }, [])
+
+  useEffect(() => {clearCache()}, [clearCache])
 
   useEffect(() => {
     if (!window.vuplex) {
@@ -72,6 +81,13 @@ const MainPage: React.FC = () => {
     vantaEffect.setOptions({...vantaConfig, sunColor: intColor});
   }
 
+  useEffect(() => {
+    if (!uniqueID) return;
+    fetchUser(uniqueID).then((user) => {
+      setUser(Object.keys(user).length === 0 ? null : user);
+      setUserWasFetched(true);
+    });
+  }, [uniqueID]);
 
   const [sensitivity, setSensitivity] = useAtom(sensitivityAtom);
 
@@ -90,6 +106,17 @@ const MainPage: React.FC = () => {
     }
   }
 
+  function rederMainPage() {
+    if (userWasFetched) {
+      if (user) {
+        return rederNormalMainPage();
+      } else {
+        return renderUsernameSelection();
+      }
+    } else {
+      return renderLoadingPage();
+    }
+  }
 
   function rederNormalMainPage() {
     return <Center>
@@ -108,11 +135,32 @@ const MainPage: React.FC = () => {
       </Center>
   }
 
+  function renderLoadingPage() {
+    return <Center>
+        <VStack>
+          <Heading variant={"gradient"} size='4xl' p={"5"} mt={"30%"} mb={"10%"}>Loading</Heading>
+        </VStack>
+      </Center>
+  }
+
+  const [usernameForm, setUsernameForm] = useState<string>("");
+
+
+  function renderUsernameSelection() {
+    return <Center>
+        <VStack>
+          <Heading variant={"gradient"} size='4xl'  mt={"30%"} mb={4}>Enter Username</Heading>
+          <Input placeholder="Username" size={"lg"} maxLength={16} value={usernameForm} onChange={(e) => setUsernameForm(e.target.value)}/>
+          <Button variant={"gradient"} background="transparent" size={"lg"} onClick={() => registerUser(uniqueID, usernameForm).then((user) => setUser(user))}>Confirm</Button>
+        </VStack>
+      </Center>
+  }
+
 
   return (<Box h={"100vh"} w={"100vw"} ref={backgroundRef}>
     
     <Box zIndex={1} height={"full"} width={"full"}>
-        {rederNormalMainPage()}
+        {rederMainPage()}
     </Box>
     
     </Box>

@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, Heading, HStack, Text } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { requestUniqueID, UnityMessage } from "./Datastorage";
+import { fetchUser, getAllLeaderboards, requestUniqueID, saveNewHighscore, UnityMessage, User, userAtom } from "./Datastorage";
 import { CHAPTERS, formatMilliseconds, getFontSizeByRank, LeaderboardTime, Level } from "./SelectLevel";
 import Medal, { MedalProps } from "./components/Medal";
 
@@ -12,6 +12,12 @@ export function getFormattedTime(elapsedTime: number) {
   const milliseconds = Math.floor(elapsedTime % 1000).toString().padStart(3, '0');
 
   return `${minutes}:${seconds}:${milliseconds}`;
+}
+
+export function getUserHighscoreOrInfinity(user: User | null, levelID: number) {
+  return user?.levelData && user.levelData.hasOwnProperty(levelID)
+  ? user.levelData[levelID]?.timeInMS ?? Infinity
+  : Infinity;
 }
 
 const IngameOverlay: React.FC = () => {
@@ -49,8 +55,21 @@ const IngameOverlay: React.FC = () => {
   }, []);
 
 
+  const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!uniqueID) return;
+    fetchUser(uniqueID).then((user) => {
+      setUser(Object.keys(user).length == 0 ? null : user);
+      console.log("got user User", user, Object.keys(user).length);
+    });
+  }, [uniqueID]);
 
+  //reregister handleUnityMessageonAnyStateChange
+  useEffect(() => {
+    window.vuplex?.addEventListener("message", handleUnityMessage);
+    return () => window.vuplex?.removeEventListener("message", handleUnityMessage);
+  }, [user]);
 
   useEffect(() => {
     if (!levelID) return;
@@ -68,14 +87,26 @@ const IngameOverlay: React.FC = () => {
       console.log("Finished Level", event);
       setTime(event.data.time);
       setLevelID(event.data.levelID);
-      setOldTime(0); // get users highscore 
+      setOldTime(getUserHighscoreOrInfinity(user, event.data.levelID));
       //console.log(event.data.time, event.data.levelID, user);
       setRestart(false);
-      // update leaderboard etc
+      getAllLeaderboards().then((leaderboards) => {
+        setLeaderboards(leaderboards);
+      });
+      if (event.data.time < getUserHighscoreOrInfinity(user, event.data.levelID)) {
+        console.log("user", user);
+        if (!user) return;
+        saveNewHighscore(user.uniqueID, Number(event.data.levelID), Number(event.data.time)).then((newUser) => {
+          setUser(newUser);
+        });
+      }
     }
     if (event.type === "LEVEL_ID") {
       setLevelID(event.data.levelID);
-      setOldTime(0);
+      setOldTime(getUserHighscoreOrInfinity(user, event.data.levelID));
+      getAllLeaderboards().then((leaderboards) => {
+        setLeaderboards(leaderboards);
+      });
     }
     if (event.type === "RESTART_LEVEL") {
       console.log("Restart Level", event);
@@ -92,6 +123,14 @@ const IngameOverlay: React.FC = () => {
   }
 
   function renderTime(){
+    /*if(time == 0){
+      return <></>
+    }
+    if (restart) {
+      return <></>
+    }*/
+
+    //console.log("User", user)
 
     if (time != 0 && time < oldTime) {
       return (
@@ -128,7 +167,7 @@ const IngameOverlay: React.FC = () => {
     )
   }
 
-  const [leaderboards, setLeaderboards] = useState<Record<string,LeaderboardTime[]>>({"1": [{username: "USER", timeInMS: 1234}, {username: "USER2", timeInMS: 2234}, {username: "USER3", timeInMS: 3234}]});
+  const [leaderboards, setLeaderboards] = useState<Record<string,LeaderboardTime[]>>({});
 
   function renderLeaderBoards(){
     return (
@@ -145,7 +184,7 @@ const IngameOverlay: React.FC = () => {
               <Text fontSize={getFontSizeByRank(i)}>{i + 1}</Text>
             </GridItem>
             <GridItem>
-              <Text fontSize={getFontSizeByRank(i)} color={time.username == "USER" ? "gold" : ""} >{time.username}</Text>
+              <Text fontSize={getFontSizeByRank(i)} color={time.username == user?.username ? "gold" : ""} >{time.username}</Text>
             </GridItem>
             <GridItem>
               <Text fontSize={getFontSizeByRank(i)}>{formatMilliseconds(time.timeInMS)}</Text>

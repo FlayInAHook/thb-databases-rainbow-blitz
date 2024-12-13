@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import GradientCard from './components/GradientCard';
 import LockOverlay from './components/LockOverlay';
 import PlayOverlay from './components/PlayOverlay';
-import { requestUniqueID, UnityMessage } from './Datastorage';
+import { fetchUser, getAllLeaderboards, getUserHighscoreOrNull, requestUniqueID, UnityMessage, userAtom } from './Datastorage';
 import lvl1Image from '/level1.png';
 import lvl2Image from '/level2.png';
 import lvl3Image from '/level3.png';
@@ -218,7 +218,7 @@ const SelectLevel: React.FC = () => {
 
   const [currentChapterIndex, setCurrentChapterIndex] = React.useState(0);
   const [currentLevelIndex, setCurrentLevelIndex] = React.useState(99);
-  const [leaderboards, setLeaderboards] = React.useState<Record<string,LeaderboardTime[]>>({"1": [{username: "USER", timeInMS: 1234}, {username: "USER2", timeInMS: 2234}, {username: "USER3", timeInMS: 3234}]});
+  const [leaderboards, setLeaderboards] = React.useState<Record<string,LeaderboardTime[]>>({});
 
   
 
@@ -247,6 +247,11 @@ const SelectLevel: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    getAllLeaderboards().then((leaderboards) => {
+      setLeaderboards(leaderboards);
+    });
+  }, []);
 
   const [uniqueID, setUniqueID] = useState<string>("");
   useEffect(() => {
@@ -263,6 +268,14 @@ const SelectLevel: React.FC = () => {
 
   
 
+
+  const [user, setUser] = useAtom(userAtom);
+  useEffect(() => {
+    if (!uniqueID) return;
+    fetchUser(uniqueID).then((user) => {
+      setUser(Object.keys(user).length === 0 ? null : user);
+    });
+  }, [uniqueID]);
 
   function handleUnityMessage(_event: any) {
     //console.log("Unity Message", _event);
@@ -356,7 +369,7 @@ const SelectLevel: React.FC = () => {
                         <Text fontSize={getFontSizeByRank(i)}>{i + 1}</Text>
                       </GridItem>
                       <GridItem>
-                        <Text fontSize={getFontSizeByRank(i)} color={time.username == "USER" ? "gold" : ""} >{time.username}</Text>
+                        <Text fontSize={getFontSizeByRank(i)} color={time.username == user?.username ? "gold" : ""} >{time.username}</Text>
                       </GridItem>
                       <GridItem>
                         <Text fontSize={getFontSizeByRank(i)}>{formatMilliseconds(time.timeInMS)}</Text>
@@ -367,7 +380,7 @@ const SelectLevel: React.FC = () => {
                 </Box>
                 {currentLevelIndex < 99 &&
                 <Box width={"full"} fontSize={"3xl"} borderTop={"1px solid white"} color="gold">
-                  User -  : 00:00.000
+                  {user?.username} - {getUserHighscoreOrNull(user, CHAPTERS[currentChapterIndex].level[currentLevelIndex].id) ? formatMilliseconds(getUserHighscoreOrNull(user, CHAPTERS[currentChapterIndex].level[currentLevelIndex].id)!) : "No Time Yet"}
                 </Box>
                 }
               </VStack>
