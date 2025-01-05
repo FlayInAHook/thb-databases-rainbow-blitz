@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 export type TLevelData = {
-  timeInMS: number;
+  timeInMS: number | null;
   ghostData: any;
 }
 

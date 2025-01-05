@@ -14,10 +14,10 @@ async function updateScore(uniqueID: string, level: number, timeInMS: number) {
     throw new Error("User not found");
   }
   const newUserData = {
-    ...user.levelData,
+    ...user.levelData || {},
     [level]: {
       timeInMS,
-      ghostData: user.levelData[level].ghostData
+      ghostData: user.levelData?.[level]?.ghostData || null
     }
   };
   user.levelData = newUserData;
@@ -32,9 +32,9 @@ async function updateGhostData(uniqueID: string, level: number, ghostData: any) 
     throw new Error("User not found");
   }
   const newUserData = {
-    ...user.levelData,
+    ...user.levelData || {},
     [level]: {
-      timeInMS: user.levelData[level].timeInMS,
+      timeInMS: user.levelData?.[level]?.timeInMS || null,
       ghostData: ghostData
     }
   };
@@ -108,7 +108,8 @@ userRoutes.get("/leaderboard", async () => {
   });
 
   Object.entries(leaderboard).forEach(([level, scores]) => {
-    scores.sort((a: TLevelData, b: TLevelData) => a.timeInMS - b.timeInMS);
+    scores.filter((score: TLevelData) => score.timeInMS !== null);
+    scores.sort((a: TLevelData, b: TLevelData) => a.timeInMS! - b.timeInMS!);
     leaderboard[level] = scores.slice(0, 10);
   });
   return leaderboard;
