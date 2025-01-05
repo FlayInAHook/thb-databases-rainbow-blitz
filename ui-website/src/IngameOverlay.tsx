@@ -3,7 +3,7 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchUser, getAllLeaderboards, requestUniqueID, saveGhostData, saveNewHighscore, UnityMessage, User, userAtom } from "./Datastorage";
-import { CHAPTERS, formatMilliseconds, getFontSizeByRank, LeaderboardTime, Level } from "./SelectLevel";
+import { CHAPTERS, formatMilliseconds, getFontSizeByRank, LeaderboardTime, Level, sendMessageToUnity } from "./SelectLevel";
 import Medal, { MedalProps } from "./components/Medal";
 
 export function getFormattedTime(elapsedTime: number) {
@@ -78,6 +78,18 @@ const IngameOverlay: React.FC = () => {
     if (!level) return;
     setLevel(level);
   }, [levelID]);
+
+
+  useEffect(() => {
+    if (!user || !levelID) return;
+    const content = {
+      levelID: levelID,
+      ghostData: user?.levelData[levelID]?.ghostData,
+    }
+    console.log("Sending User Data", content);
+
+    sendMessageToUnity({type: "userData", content});
+  }, [levelID, user]);
 
   function handleUnityMessage(_event: any) {
     console.log("Unity Message", _event);

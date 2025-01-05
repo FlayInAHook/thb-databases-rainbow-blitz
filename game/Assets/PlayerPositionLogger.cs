@@ -21,7 +21,7 @@ public class PlayerPositionLogger : MonoBehaviour
             LogStream?.Close();
             if (DatabasePoster is { })
             {
-                // keine ahnung, wie man das in die DB bekommt - es sieht nicht so aus, als würde irgendwas die dbConnection verwenden.
+                // keine ahnung, wie man das in die DB bekommt - es sieht nicht so aus, als wï¿½rde irgendwas die dbConnection verwenden.
                 DatabasePoster.PostDbMessage(@$"{{
     ""type"":""LEVEL_TRACE"",
     ""data"":
@@ -58,7 +58,7 @@ public class PlayerPositionLogger : MonoBehaviour
         Quaternion orientation = transform.rotation;
         var logLine = $"{Time.time} {position.x} {position.y} {position.z} {orientation.x} {orientation.y} {orientation.z} {orientation.w}";
         SB.Append(logLine);
-        SB.Append('\n');
+        SB.Append("END");
         LogStream?.Write(Encoding.UTF8.GetBytes(logLine).AsSpan());
         LogStream?.Write(NewLineBytes);
     }

@@ -3,6 +3,7 @@ import { atomWithStorage } from "jotai/utils";
 
 export type LevelData = {
   timeInMS: number;
+  ghostData: String | null;
 }
 
 export type User = {
