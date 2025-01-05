@@ -57,7 +57,8 @@ public class PlayerPositionLogger : MonoBehaviour
         Vector3 position = transform.position;
         Quaternion orientation = transform.rotation;
         var logLine = $"{Time.time} {position.x} {position.y} {position.z} {orientation.x} {orientation.y} {orientation.z} {orientation.w}";
-        SB.AppendLine(logLine);
+        SB.Append(logLine);
+        SB.Append('\n');
         LogStream?.Write(Encoding.UTF8.GetBytes(logLine).AsSpan());
         LogStream?.Write(NewLineBytes);
     }
