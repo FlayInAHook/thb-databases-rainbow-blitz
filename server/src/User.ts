@@ -6,7 +6,7 @@ async function registerUser(username: string, uniqueID: string) {
   return await user.save();
 }
 
-async function updateScore(uniqueID: string, level: number, timeInMS: number, ghostData: any) {
+async function updateScore(uniqueID: string, level: number, timeInMS: number) {
   const user = await User.findOne({
     uniqueID
   });
@@ -17,7 +17,25 @@ async function updateScore(uniqueID: string, level: number, timeInMS: number, gh
     ...user.levelData,
     [level]: {
       timeInMS,
-      ghostData
+      ghostData: user.levelData[level].ghostData
+    }
+  };
+  user.levelData = newUserData;
+  return await user.save();
+}
+
+async function updateGhostData(uniqueID: string, level: number, ghostData: any) {
+  const user = await User.findOne({
+    uniqueID
+  });
+  if (!user) {
+    throw new Error("User not found");
+  }
+  const newUserData = {
+    ...user.levelData,
+    [level]: {
+      timeInMS: user.levelData[level].timeInMS,
+      ghostData: ghostData
     }
   };
   user.levelData = newUserData;
@@ -45,9 +63,9 @@ userRoutes.post("/user", async ({body: {username, uniqueID}}) => {
   )
 });
 
-userRoutes.post("/user/score", async ({body: {uniqueID, level, timeInMS, ghostData}}) => {
+userRoutes.post("/user/score", async ({body: {uniqueID, level, timeInMS}}) => {
   console.log(uniqueID, level, timeInMS)
-  const user = await updateScore(uniqueID, level, timeInMS, ghostData);
+  const user = await updateScore(uniqueID, level, timeInMS);
   console.log(user);
   return user.toJSON();
 }, {
@@ -55,7 +73,19 @@ userRoutes.post("/user/score", async ({body: {uniqueID, level, timeInMS, ghostDa
     {
       uniqueID: t.String(),
       level: t.Number(),
-      timeInMS: t.Number(),
+      timeInMS: t.Number()
+    }
+  )
+});
+
+userRoutes.post("/user/ghost", async ({body: {uniqueID, level, ghostData}}) => {
+  const user = await updateGhostData(uniqueID, level, ghostData);
+  return user.toJSON();
+}, {
+  body: t.Object(
+    {
+      uniqueID: t.String(),
+      level: t.Number(),
       ghostData: t.Any()
     }
   )

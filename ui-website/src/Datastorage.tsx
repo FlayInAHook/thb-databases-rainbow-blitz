@@ -15,7 +15,7 @@ export type User = {
 }
 
 export type UnityMessage = {
-  type: "FINISHED_LEVEL" | "RESTART_LEVEL" | "PAUSE" | "UNIQUE_ID" | "OPEN_ESCAPE_MENU" | "LEVEL_ID";
+  type: "FINISHED_LEVEL" | "RESTART_LEVEL" | "PAUSE" | "UNIQUE_ID" | "OPEN_ESCAPE_MENU" | "LEVEL_ID" | "LEVEL_TRACE";
   data: any;
 }
 
@@ -66,6 +66,18 @@ export const saveNewHighscore = async (uniqueID: string, levelID: number, timeIn
       "Content-Type": "application/json"
     },
     body: JSON.stringify({level: levelID, timeInMS, uniqueID})
+  });
+  const data = await response.json();
+  return data;
+}
+
+export const saveGhostData = async (uniqueID: string, levelID: number, ghostData: any): Promise<User> => {
+  const response = await fetch(`${USER_URL}/ghost`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({level: levelID, ghostData, uniqueID})
   });
   const data = await response.json();
   return data;

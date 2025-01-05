@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, Heading, HStack, Text } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUser, getAllLeaderboards, requestUniqueID, saveNewHighscore, UnityMessage, User, userAtom } from "./Datastorage";
+import { fetchUser, getAllLeaderboards, requestUniqueID, saveGhostData, saveNewHighscore, UnityMessage, User, userAtom } from "./Datastorage";
 import { CHAPTERS, formatMilliseconds, getFontSizeByRank, LeaderboardTime, Level } from "./SelectLevel";
 import Medal, { MedalProps } from "./components/Medal";
 
@@ -119,6 +119,12 @@ const IngameOverlay: React.FC = () => {
     if (event.type == "OPEN_ESCAPE_MENU"){
       console.log("Open Escape Menu", event);
       navigate("/escapeoverlay");
+    }
+    if (event.type == "LEVEL_TRACE") {
+      if (!user) return;
+      saveGhostData(user.uniqueID, Number(event.data.levelID), event.data.log).then((newUser) => {
+        setUser(newUser);
+      });
     }
   }
 
