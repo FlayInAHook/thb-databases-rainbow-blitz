@@ -9,20 +9,30 @@ public class Ghost : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("Ghost Start" + StartTime);
+        //Debug.Log("Ghost Start" + StartTime);
 
-        var logFilePath = @"C:\temp\Uni\Ghost.txt";// Path.Combine(Application.persistentDataPath, "PlayerPositionLog.txt");
-        if (File.Exists(logFilePath))
-        {
-            var lines = File.ReadAllLines(logFilePath);
-            Infos = new Stack<string[]>(lines.Select(line => line.Split(' ')).Reverse());
-            if (Infos.TryPeek(out var firstInfo))
-            {
-                StartTime = float.Parse(firstInfo[0]);
-            }
-            Debug.Log("Start" + StartTime);
-        }
+        //var logFilePath = @"C:\temp\Uni\Ghost.txt";// Path.Combine(Application.persistentDataPath, "PlayerPositionLog.txt");
+        //if (File.Exists(logFilePath))
+        //{
+        //    var lines = File.ReadAllLines(logFilePath);
+        //    Infos = new Stack<string[]>(lines.Select(line => line.Split(' ')).Reverse());
+        //    if (Infos.TryPeek(out var firstInfo))
+        //    {
+        //        StartTime = float.Parse(firstInfo[0]);
+        //    }
+        //    Debug.Log("Start" + StartTime);
+        //}
         //         var logLine = $"{Time.time}, {position.x}, {position.y}, {position.z}, {orientation.x}, {orientation.y}, {orientation.z}, {orientation.w}\n";
+    }
+
+    public void LoadData(string data)
+    {
+        Infos = new(data.Split(@"\n").Select(s => s.Split(" ")));
+
+        if (Infos.TryPeek(out var firstInfo))
+        {
+            StartTime = float.Parse(firstInfo[0]);
+        }
     }
 
     float StartTime = 0;
@@ -46,14 +56,14 @@ public class Ghost : MonoBehaviour
             }
         }
         else
-        { 
+        {
             if (Infos?.TryPop(out var info) ?? false)
             {
                 var time = float.Parse(info[0]) - StartTime;
                 var position = new Vector3(float.Parse(info[1]), float.Parse(info[2]), float.Parse(info[3]));
                 var orientation = new Quaternion(float.Parse(info[4]), float.Parse(info[5]), float.Parse(info[6]), float.Parse(info[7]));
                 Current = (true, info, time, position, orientation);
-                
+
             }
             else
             {

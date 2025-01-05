@@ -16,6 +16,8 @@ public class UIMessageListener : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    GameObject? GhostPrefab;
+
     private CanvasWebViewPrefab webViewPrefab;
     async void Start()
     {
@@ -34,6 +36,11 @@ public class UIMessageListener : MonoBehaviour
                 var logger = character.AddComponent<PlayerPositionLogger>();
                 logger.DatabasePosterBehaviour = levelManager.GetComponent<IDatabasePoster>() as MonoBehaviour;
             }
+            Object ghostPrefabObject = Resources.Load("GhostPrefab");
+            GhostPrefab = ghostPrefabObject as GameObject;
+
+            // Optionally, set the parent of the new GameObject
+            GhostPrefab.transform.SetParent(transform);
         };
 
         //webViewPrefab.WebView.Resize(1980, 1080);
@@ -79,15 +86,23 @@ public class UIMessageListener : MonoBehaviour
                 StaticInfo.SENSITIVITY = float.Parse(message.content, CultureInfo.InvariantCulture);
                 Debug.Log("Sensitivity set to: " + StaticInfo.SENSITIVITY);
             }
-            if (message.type == "USER_LEVEL_DATA"){
-                /* message.content = {
-                  levelID: number,
-                  ghostData: String,
-                } */
-              // TODO Alex: Implement this :D
+            if (message.type == "USER_LEVEL_DATA")
+            {
+                // TODO @Tim: wir kommen im Debug-Level hier nicht an
+                var userLevelData = JsonUtility.FromJson<UserLevelData>(message.content);
+                GhostInfoByLevel[userLevelData.LevelID] = userLevelData.GhostData;
+                GhostPrefab.GetComponent<Ghost>().LoadData(userLevelData.GhostData);
             }
         };
     }
+
+    public class UserLevelData
+    {
+        public int LevelID { get; set; }
+        public string GhostData { get; set; }
+    }
+
+    private static Dictionary<int, string> GhostInfoByLevel = new();
 
     // Update is called once per frame
     void Update()
