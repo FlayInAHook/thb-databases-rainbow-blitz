@@ -86,9 +86,9 @@ const IngameOverlay: React.FC = () => {
       levelID: levelID,
       ghostData: user?.levelData[levelID]?.ghostData,
     }
-    console.log("Sending User Data", content);
+    console.log("Sending USER_LEVEL_DATA", content);
 
-    sendMessageToUnity({type: "userData", content});
+    sendMessageToUnity({type: "USER_LEVEL_DATA", content});
   }, [levelID, user]);
 
   function handleUnityMessage(_event: any) {

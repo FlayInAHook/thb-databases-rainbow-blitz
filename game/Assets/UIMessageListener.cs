@@ -79,6 +79,13 @@ public class UIMessageListener : MonoBehaviour
                 StaticInfo.SENSITIVITY = float.Parse(message.content, CultureInfo.InvariantCulture);
                 Debug.Log("Sensitivity set to: " + StaticInfo.SENSITIVITY);
             }
+            if (message.type == "USER_LEVEL_DATA"){
+                /* message.content = {
+                  levelID: number,
+                  ghostData: String,
+                } */
+              // TODO Alex: Implement this :D
+            }
         };
     }
 
