@@ -4,7 +4,7 @@ using System;
 using System.Text;
 using System.Data.Common;
 
-public class PlayerPositionLogger : MonoBehaviour, IDisposable
+public class PlayerPositionLogger : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,6 +15,23 @@ public class PlayerPositionLogger : MonoBehaviour, IDisposable
             LogStream = File.OpenWrite(logFilePath);
         }
         SB = new();
+
+        DatabasePoster.RegisterFinishedNotification(() =>
+        {
+            LogStream?.Close();
+            if (DatabasePoster is { })
+            {
+                // keine ahnung, wie man das in die DB bekommt - es sieht nicht so aus, als würde irgendwas die dbConnection verwenden.
+                DatabasePoster.PostDbMessage(@$"{{
+    ""type"":""LEVEL_TRACE"",
+    ""data"":
+    {{
+    ""levelID"":""{DatabasePoster.LevelID}"",
+    ""log"":""{SB}""
+    }}
+}}");
+            }
+        });
     }
     FileStream LogStream;
     StringBuilder SB;
@@ -46,20 +63,4 @@ public class PlayerPositionLogger : MonoBehaviour, IDisposable
     }
 
     byte[] NewLineBytes = Encoding.UTF8.GetBytes("\n");
-
-    void IDisposable.Dispose()
-    {
-        LogStream?.Close();
-        if (false)//DatabasePoster is { })
-        {
-            // keine ahnung, wie man das in die DB bekommt - es sieht nicht so aus, als würde irgendwas die dbConnection verwenden.
-            DatabasePoster.PostDbMessage(@$"{{
-    ""TraceInfo"":
-    {{
-    ""Level"":""{ DatabasePoster.LevelName}"",
-    ""Log"":""{SB}""
-    }}
-}}");
-        }
-    }
 }

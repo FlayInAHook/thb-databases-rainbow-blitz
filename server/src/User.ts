@@ -25,6 +25,7 @@ async function updateScore(uniqueID: string, level: number, timeInMS: number) {
 }
 
 async function updateGhostData(uniqueID: string, level: number, ghostData: any) {
+  console.log("updateGhostData", ghostData);
   const user = await User.findOne({
     uniqueID
   });

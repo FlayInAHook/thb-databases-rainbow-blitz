@@ -39,7 +39,7 @@ public class Ghost : MonoBehaviour
         {
             if (Time.time > Current.Time)
             {
-                Debug.Log("Moving at" + Current.Time);
+                //Debug.Log("Moving at" + Current.Time);
                 transform.position = Current.Position;
                 transform.rotation = Current.Orientation;
                 Current.Valid = false;
