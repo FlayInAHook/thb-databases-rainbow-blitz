@@ -35,7 +35,8 @@ export const requestUniqueID = () => {
   window.vuplex.postMessage({type: "REQUEST_UNIQUE_ID"});
 }
 
-export const API_URL = "https://rainbowblitzui.flayinahook.de/api/"; //"http://localhost:3000"; 
+//export const API_URL = "https://rainbowblitzui.flayinahook.de/api/"; //"http://localhost:3000"; 
+export const API_URL = "http://localhost:3000";
 export const USER_URL = `${API_URL}/user`;
 
 export const fetchUser = async (uniqueID: string): Promise<User> => {
