@@ -1,5 +1,6 @@
 import Elysia, { t } from 'elysia';
 import { TLevelData, User } from "./DBDefinitions";
+import { addGhostData } from './GhostData';
 
 async function registerUser(username: string, uniqueID: string) {
   const user = new User({username, levelData: {}, uniqueID, isDev: false});
@@ -81,6 +82,7 @@ userRoutes.post("/user/score", async ({body: {uniqueID, level, timeInMS}}) => {
 
 userRoutes.post("/user/ghost", async ({body: {uniqueID, level, ghostData}}) => {
   const user = await updateGhostData(uniqueID, level, ghostData);
+  const ghost = await addGhostData(user.id, level, ghostData);
   return user.toJSON();
 }, {
   body: t.Object(
