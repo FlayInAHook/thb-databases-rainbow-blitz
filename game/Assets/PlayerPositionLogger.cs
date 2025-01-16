@@ -16,7 +16,7 @@ public class PlayerPositionLogger : MonoBehaviour
         }
         SB = new();
 
-        DatabasePoster.RegisterFinishedNotification(() =>
+        DatabasePoster.RegisterFinishedNotification(timeStr =>
         {
             LogStream?.Close();
             if (DatabasePoster is { })
@@ -26,6 +26,7 @@ public class PlayerPositionLogger : MonoBehaviour
     ""type"":""LEVEL_TRACE"",
     ""data"":
     {{
+    ""time"":""{timeStr}"",
     ""levelID"":""{DatabasePoster.LevelID}"",
     ""log"":""{SB}""
     }}

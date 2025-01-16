@@ -27,8 +27,11 @@ public class Ghost : MonoBehaviour
 
     public void LoadData(string data)
     {
-        Infos = new(data.Split(@"\n").Select(s => s.Split(" ")));
-
+        Infos = new(data.Split(@"END").Select(s => s.Split(" ")));
+        if (Infos.Peek().Length == 1)
+        {
+            Infos.Pop();
+        }
         if (Infos.TryPeek(out var firstInfo))
         {
             StartTime = float.Parse(firstInfo[0]);

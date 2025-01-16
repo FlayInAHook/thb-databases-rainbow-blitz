@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,13 +18,13 @@ public class Message
 public class GhostDataMessage
 {
     public string type;
-    public UserLevelData content;
+    public string content;
 }
 
 public class UserLevelData
 {
-    public int levelID { get; set; }
-    public string ghostData { get; set; }
+    public int levelID;
+    public string ghostData;
 }
 
 
@@ -43,6 +44,10 @@ public class UIMessageListener : MonoBehaviour
 
         SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
         {
+            if (this.IsDestroyed())
+            {
+                return;
+            }
             var character = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "Character");
             var levelManager = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "LevelManager");
 
@@ -56,6 +61,15 @@ public class UIMessageListener : MonoBehaviour
 
             // Optionally, set the parent of the new GameObject
             GhostPrefab.transform.SetParent(transform);
+
+            //if (GhostInfoByLevel.TryGetValue(StaticInfo.GetLevelID(), out var ghostInfo))
+            //{
+            //    var ghost = GhostPrefab.GetComponent<Ghost>();
+            //        if (ghost is { })
+            //        {
+            //            ghost.LoadData(ghostInfo);
+            //        }
+            //}
         };
 
         //webViewPrefab.WebView.Resize(1980, 1080);
@@ -104,19 +118,27 @@ public class UIMessageListener : MonoBehaviour
             if (message.type == "USER_LEVEL_DATA")
             {
                 var ghostDataMessage = JsonUtility.FromJson<GhostDataMessage>(eventArgs.Value);
-                Debug.Log("Received user level data: " + ghostDataMessage.content);
-                // TODO @Tim: wir kommen im Debug-Level hier nicht an
-                var userLevelData = ghostDataMessage.content;
-                Debug.Log("Received user level data: " + userLevelData.levelID + " " + userLevelData.ghostData);
-                GhostInfoByLevel[userLevelData.levelID] = userLevelData.ghostData;
-                GhostPrefab.GetComponent<Ghost>().LoadData(userLevelData.ghostData);
+                if (ghostDataMessage.type == "USER_LEVEL_DATA")
+                {
+                    var userLevelData = JsonUtility.FromJson<UserLevelData>(ghostDataMessage.content);
+                    Debug.Log("Received user level data: " + userLevelData.levelID + " " + userLevelData.ghostData);
+                    GhostInfoByLevel[userLevelData.levelID.ToString()] = userLevelData.ghostData;
+                    if (GhostPrefab is { } gp)
+                    {
+                        var ghostInstance = GameObject.Instantiate(gp);
+                        if (ghostInstance.GetComponent<Ghost>() is { } ghost)
+                        {
+                            ghost.LoadData(userLevelData.ghostData);
+                        }
+                    }
+                }
             }
         };
     }
 
-    
 
-    private static Dictionary<int, string> GhostInfoByLevel = new();
+
+    private static Dictionary<string, string> GhostInfoByLevel = new();
 
     // Update is called once per frame
     void Update()

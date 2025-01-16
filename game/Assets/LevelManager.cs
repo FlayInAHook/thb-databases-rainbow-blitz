@@ -12,18 +12,18 @@ public interface IDatabasePoster
 {
     void PostDbMessage(string message);
     string LevelID { get; }
-    void RegisterFinishedNotification(Action finishedAction);
+    void RegisterFinishedNotification(Action<string> finishedAction);
 }
 
 public class LevelManager : MonoBehaviour, IDatabasePoster
 {
 
-    public void RegisterFinishedNotification(Action finishedAction)
+    public void RegisterFinishedNotification(Action<string> finishedAction)
     {
         FinishedAction = finishedAction;
     }
 
-    private Action? FinishedAction;
+    private Action<string>? FinishedAction;
     GameObject hotbarContainer;
     public GameObject canvasWebViewPrefab;
     private static GameObject ingameOverlay;
@@ -110,7 +110,7 @@ public class LevelManager : MonoBehaviour, IDatabasePoster
 
         if (updates == updatesToWait - 1)
         {
-            PostDbMessage("{\"type\": \"LEVEL_ID\", \"data\": {\"levelID\": \"" + StaticInfo.GetLevelID(SceneManager.GetActiveScene().name) + "\"}}");
+            PostDbMessage("{\"type\": \"LEVEL_ID\", \"data\": {\"levelID\": \"" + StaticInfo.GetLevelID() + "\"}}");
         }
 
         if (updates < updatesToWait)
@@ -133,7 +133,7 @@ public class LevelManager : MonoBehaviour, IDatabasePoster
 
     public void PostDbMessage(string message) => webViewPrefab.WebView.PostMessage(message);
 
-    public string LevelID => StaticInfo.GetLevelID(SceneManager.GetActiveScene().name);
+    public string LevelID => StaticInfo.GetLevelID();
     public void onResume()
     {
         canMove = true;
@@ -145,9 +145,10 @@ public class LevelManager : MonoBehaviour, IDatabasePoster
 
     public void OnFinished()
     {
-        FinishedAction?.Invoke();
+        var timeStr = timerDisplay.GetElapsedTime().ToString("F3").Replace(",", "");
+        FinishedAction?.Invoke(timeStr);
         Reload();
-        PostDbMessage("{\"type\": \"FINISHED_LEVEL\", \"data\": {\"time\":\"" + timerDisplay.GetElapsedTime().ToString("F3").Replace(",", "") + "\"" +
+        PostDbMessage("{\"type\": \"FINISHED_LEVEL\", \"data\": {\"time\":\"" + timeStr + "\"" +
                                           ",\"levelID\": \"" + LevelID + "\"}}");
     }
 

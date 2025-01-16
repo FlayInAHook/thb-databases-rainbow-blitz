@@ -115,3 +115,17 @@ C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), for
 
 [0105/173850.395:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
 [0105/173850.395:WARNING:sqlite_persistent_store_backend_base.cc(198)] Failed to post task from FlushAndNotifyInBackground@net\extras\sqlite\sqlite_persistent_store_backend_base.cc:247 to client_task_runner_.
+[0116/183508.912:ERROR:ChromiumLogFunctions.h(15)] Message received for a non-existent webview: {"type":13,"webViewId":"WebView-373aa914-a9a3-4ea0-90e0-cad018e3bf0a"}
+[0116/183508.913:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] ReadFile failed with error code: 109
+[0116/183536.386:ERROR:ChromiumLogFunctions.h(15)] Didn't receive a heartbeat message from the main process, so it must have died. Terminating the Vuplex WebView Chromium process...
+[0116/183536.495:ERROR:ChromiumLogFunctions.h(15)] [WindowsChromiumToPluginBridge] WriteFile failed with error code: 232
+[0116/204657.148:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/204657.152:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/204657.153:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/204657.154:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/204657.155:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/205906.050:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/205906.051:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/205906.052:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/205906.053:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
+[0116/205906.054:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
