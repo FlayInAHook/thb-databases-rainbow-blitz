@@ -133,9 +133,9 @@ const IngameOverlay: React.FC = () => {
       navigate("/escapeoverlay");
     }
     if (event.type == "LEVEL_TRACE") {
-      console.log("LEVEL_TRACE");
+      console.log("LEVEL_TRACE", event);
       if (!user) return;
-      saveGhostData(user.uniqueID, Number(event.data.levelID), event.data.log).then((newUser) => {
+      saveGhostData(user.uniqueID, Number(event.data.levelID), event.data.log, Number(event.data.time)).then((newUser) => {
         setUser(newUser);
       });
     }

@@ -73,14 +73,14 @@ export const saveNewHighscore = async (uniqueID: string, levelID: number, timeIn
   return data;
 }
 
-export const saveGhostData = async (uniqueID: string, levelID: number, ghostData: any): Promise<User> => {
+export const saveGhostData = async (uniqueID: string, levelID: number, ghostData: any, timeInMS: number): Promise<User> => {
   console.log("saveGhostData"); 
   const response = await fetch(`${USER_URL}/ghost`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({level: levelID, ghostData, uniqueID})
+    body: JSON.stringify({level: levelID, ghostData, uniqueID, timeInMS})
   });
   const data = await response.json();
   return data;

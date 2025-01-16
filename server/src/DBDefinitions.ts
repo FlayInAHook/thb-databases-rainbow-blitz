@@ -25,14 +25,14 @@ export const User = model<TUser>("User", userSchema);
 
 export type TGhostData = {
   levelID: number;
-  ghostData: any;
   userID: Schema.Types.ObjectId;
+  levelData: TLevelData;
 }
 
 const ghostDataSchema = new Schema<TGhostData>({
   levelID: {type: Number, required: true},
-  ghostData: {type: String, required: true},
-  userID: {type: Schema.Types.ObjectId, ref: "User"}
+  userID: {type: Schema.Types.ObjectId, ref: "User"},
+  levelData: {type: Object, required: true}
 });
 
 export const GhostData = model<TGhostData>("GhostData", ghostDataSchema);

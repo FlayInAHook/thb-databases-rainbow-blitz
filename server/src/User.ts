@@ -80,16 +80,17 @@ userRoutes.post("/user/score", async ({body: {uniqueID, level, timeInMS}}) => {
   )
 });
 
-userRoutes.post("/user/ghost", async ({body: {uniqueID, level, ghostData}}) => {
+userRoutes.post("/user/ghost", async ({body: {uniqueID, level, ghostData, timeInMS}}) => {
   const user = await updateGhostData(uniqueID, level, ghostData);
-  const ghost = await addGhostData(user.id, level, ghostData);
+  const ghost = await addGhostData(user.id, level, ghostData, timeInMS);
   return user.toJSON();
 }, {
   body: t.Object(
     {
       uniqueID: t.String(),
       level: t.Number(),
-      ghostData: t.Any()
+      ghostData: t.Any(),
+      timeInMS: t.Number()
     }
   )
 });
