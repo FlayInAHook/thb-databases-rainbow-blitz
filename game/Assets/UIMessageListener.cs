@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Vuplex.WebView;
@@ -10,7 +11,21 @@ public class Message
 {
     public string type;
     public string content;
+
 }
+
+public class GhostDataMessage
+{
+    public string type;
+    public UserLevelData content;
+}
+
+public class UserLevelData
+{
+    public int levelID { get; set; }
+    public string ghostData { get; set; }
+}
+
 
 public class UIMessageListener : MonoBehaviour
 {
@@ -88,19 +103,18 @@ public class UIMessageListener : MonoBehaviour
             }
             if (message.type == "USER_LEVEL_DATA")
             {
+                var ghostDataMessage = JsonUtility.FromJson<GhostDataMessage>(eventArgs.Value);
+                Debug.Log("Received user level data: " + ghostDataMessage.content);
                 // TODO @Tim: wir kommen im Debug-Level hier nicht an
-                var userLevelData = JsonUtility.FromJson<UserLevelData>(message.content);
-                GhostInfoByLevel[userLevelData.LevelID] = userLevelData.GhostData;
-                GhostPrefab.GetComponent<Ghost>().LoadData(userLevelData.GhostData);
+                var userLevelData = ghostDataMessage.content;
+                Debug.Log("Received user level data: " + userLevelData.levelID + " " + userLevelData.ghostData);
+                GhostInfoByLevel[userLevelData.levelID] = userLevelData.ghostData;
+                GhostPrefab.GetComponent<Ghost>().LoadData(userLevelData.ghostData);
             }
         };
     }
 
-    public class UserLevelData
-    {
-        public int LevelID { get; set; }
-        public string GhostData { get; set; }
-    }
+    
 
     private static Dictionary<int, string> GhostInfoByLevel = new();
 
