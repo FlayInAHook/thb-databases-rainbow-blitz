@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Ghost : MonoBehaviour
 {
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
+    {       
         //Debug.Log("Ghost Start" + StartTime);
 
         //var logFilePath = @"C:\temp\Uni\Ghost.txt";// Path.Combine(Application.persistentDataPath, "PlayerPositionLog.txt");
@@ -27,15 +30,12 @@ public class Ghost : MonoBehaviour
 
     public void LoadData(string data)
     {
-        Infos = new(data.Split(@"END").Select(s => s.Split(" ")));
-        if (Infos.Peek().Length == 1)
+        Infos = new(data.Split(@"END", StringSplitOptions.RemoveEmptyEntries).Reverse().Select(s => s.Split(" ")));
+
+        if (Infos.TryPeek(out var first))
         {
-            Infos.Pop();
-        }
-        if (Infos.TryPeek(out var firstInfo))
-        {
-            StartTime = float.Parse(firstInfo[0]);
-        }
+            StartTime = float.Parse(first[0]);
+        }   
     }
 
     float StartTime = 0;
@@ -47,10 +47,10 @@ public class Ghost : MonoBehaviour
     void Update()
     {
         if (Stopped) return;
-
+        var elapsedTime = TimerDisplay.elapsedTime;
         if (Current.Valid)
         {
-            if (Time.time > Current.Time)
+            if (elapsedTime > Current.Time)
             {
                 //Debug.Log("Moving at" + Current.Time);
                 transform.position = Current.Position;

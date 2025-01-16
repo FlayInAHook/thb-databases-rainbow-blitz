@@ -7,7 +7,7 @@ using UnityEngine;
 public class TimerDisplay : MonoBehaviour
 {
     private TextMeshProUGUI timerText;
-    private float elapsedTime;
+    public static float elapsedTime;
     private bool isRunning = true;
 
     void Start()

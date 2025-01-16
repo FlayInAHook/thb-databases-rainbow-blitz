@@ -3,6 +3,8 @@ using System.IO;
 using System;
 using System.Text;
 using System.Data.Common;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class PlayerPositionLogger : MonoBehaviour
 {
@@ -46,18 +48,19 @@ public class PlayerPositionLogger : MonoBehaviour
 
     void Update()
     {
-        if (Time.time >= nextLogTime)
+        if (TimerDisplay.elapsedTime >= nextLogTime)
         {
+            nextLogTime = TimerDisplay.elapsedTime + logInterval;
             LogCharacterPositionAndOrientation();
-            nextLogTime = Time.time + logInterval;
         }
     }
 
     void LogCharacterPositionAndOrientation()
     {
+        var time = TimerDisplay.elapsedTime;
         Vector3 position = transform.position;
         Quaternion orientation = transform.rotation;
-        var logLine = $"{Time.time} {position.x} {position.y} {position.z} {orientation.x} {orientation.y} {orientation.z} {orientation.w}";
+        var logLine = $"{time} {position.x} {position.y} {position.z} {orientation.x} {orientation.y} {orientation.z} {orientation.w}";
         SB.Append(logLine);
         SB.Append("END");
         LogStream?.Write(Encoding.UTF8.GetBytes(logLine).AsSpan());
