@@ -15,6 +15,12 @@ export type User = {
   isDev: boolean;
 }
 
+export type GhostData = {
+  levelID: number;
+  userID: string;
+  levelData: LevelData;
+}
+
 export type UnityMessage = {
   type: "FINISHED_LEVEL" | "RESTART_LEVEL" | "PAUSE" | "UNIQUE_ID" | "OPEN_ESCAPE_MENU" | "LEVEL_ID" | "LEVEL_TRACE";
   data: any;
@@ -96,4 +102,16 @@ export const getUserHighscoreOrNull = (user: User | null, levelID: number): numb
   return user?.levelData && user.levelData.hasOwnProperty(levelID)
   ? user.levelData[levelID]?.timeInMS ?? null
   : null;
+}
+
+export const getAllGhostData = async (): Promise<GhostData[]> => {
+  const response = await fetch(`${API_URL}/ghostData`);
+  const data = await response.json();
+  return data;
+}
+
+export const getGhostDataForLevel = async (levelID: number): Promise<GhostData[]> => {
+  const response = await fetch(`${API_URL}/ghostData/${levelID}`);
+  const data = await response.json();
+  return data;
 }
