@@ -43,7 +43,7 @@ public class PlayerPositionLogger : MonoBehaviour
     public MonoBehaviour DatabasePosterBehaviour;
     private IDatabasePoster DatabasePoster => DatabasePosterBehaviour as IDatabasePoster;
 
-    public float logInterval = 0.1f; // Interval in seconds
+    public float logInterval = 0.03f; // Interval in seconds
     private float nextLogTime = 0f;
 
     void Update()
