@@ -64,6 +64,7 @@ const IngameOverlay: React.FC = () => {
       setUser(Object.keys(user).length == 0 ? null : user);
       console.log("got user User", user, Object.keys(user).length);
     });
+    sendGhostDataToUnity();
   }, [uniqueID]);
 
   //reregister handleUnityMessageonAnyStateChange
@@ -102,7 +103,7 @@ const IngameOverlay: React.FC = () => {
           levelID: levelID,
           ghostData: ghostData,
         }
-        console.log("Sending USER_LEVEL_DATA", content);
+        console.log("Sending GHOST_LEVEL_DATA", content);
     
         sendMessageToUnity({type: "GHOST_LEVEL_DATA", content: JSON.stringify(content)});
       });
