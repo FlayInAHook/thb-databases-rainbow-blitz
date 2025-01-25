@@ -26,6 +26,36 @@ ghostRoutes.get("/ghostData", async () => {
 });
 
 ghostRoutes.get("/ghostData/:levelID", async ({params: {levelID}}) => {
-  const result = await GhostData.find({levelID}, {_id: 0, __v: 0}).lean() || {};
+  const result = await GhostData.aggregate([
+    {
+      $match: {
+        levelID: parseInt(levelID)
+      }
+    },
+    {
+      $sort: {
+        "levelData.timeInMS": 1
+      }
+    },
+    {
+      $group: {
+        _id: "$userID",
+        levelData: {
+          $first: "$levelData"
+        }
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          userID: "$_id",
+          levelData: "$levelData"
+        }
+      }
+    },
+    {
+      $limit: 1
+    }
+  ]);
   return result;
 });

@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, Heading, HStack, Text } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchUser, getAllLeaderboards, requestUniqueID, saveGhostData, saveNewHighscore, UnityMessage, User, userAtom } from "./Datastorage";
+import { fetchUser, getAllLeaderboards, getGhostDataForLevel, requestUniqueID, saveGhostData, saveNewHighscore, UnityMessage, User, userAtom } from "./Datastorage";
 import { CHAPTERS, formatMilliseconds, getFontSizeByRank, LeaderboardTime, Level, sendMessageToUnity } from "./SelectLevel";
 import Medal, { MedalProps } from "./components/Medal";
 
@@ -48,6 +48,7 @@ const IngameOverlay: React.FC = () => {
     console.log("Requesting Unique ID");
     setTimeout(() => {
       requestUniqueID();
+      sendGhostDataToUnity();
     }, 500);
     //requestUniqueID();
     window.vuplex?.addEventListener("message", handleUnityMessage);
@@ -81,15 +82,33 @@ const IngameOverlay: React.FC = () => {
 
 
   useEffect(() => {
-    if (!user || !levelID) return;
-    const content = {
-      levelID: levelID,
-      ghostData: user?.levelData[levelID]?.ghostData,
-    }
-    console.log("Sending USER_LEVEL_DATA", content);
-
-    sendMessageToUnity({type: "USER_LEVEL_DATA", content: JSON.stringify(content)});
+    sendGhostDataToUnity();
   }, [levelID, user]);
+
+  function sendGhostDataToUnity() {
+    if (!user || !levelID) return;
+
+    if (levelID != 1){
+      const content = {
+        levelID: levelID,
+        ghostData: user?.levelData[levelID]?.ghostData,
+      }
+      console.log("Sending USER_LEVEL_DATA", content);
+  
+      sendMessageToUnity({type: "USER_LEVEL_DATA", content: JSON.stringify(content)});
+    } else {
+      getGhostDataForLevel(levelID).then((ghostData) => {
+        const content = {
+          levelID: levelID,
+          ghostData: ghostData,
+        }
+        console.log("Sending USER_LEVEL_DATA", content);
+    
+        sendMessageToUnity({type: "GHOST_LEVEL_DATA", content: JSON.stringify(content)});
+      });
+    }
+    
+  }
 
   function handleUnityMessage(_event: any) {
     console.log("Unity Message", _event);
