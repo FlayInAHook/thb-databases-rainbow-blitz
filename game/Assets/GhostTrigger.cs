@@ -15,18 +15,7 @@ public class GhostCollider : MonoBehaviour
             }
             else if (hasExited)
             {
-                // Alle Kind-Objekte des Geistes deaktivieren
-                foreach (Transform child in transform)
-                {
-                    if (child.GetComponent<MeshRenderer>() != null)
-                    {
-                        child.GetComponent<MeshRenderer>().enabled = false;
-                    }
-                    if (child.GetComponent<ParticleSystem>() != null)
-                    {
-                        child.GetComponent<ParticleSystem>().Stop();
-                    }
-                }
+                gameObject.SetActive(false);
             }
         }
     }
