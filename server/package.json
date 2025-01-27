@@ -2,7 +2,7 @@
   "name": "rainbow-blitz-server",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "bun run test/index.ts",
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {

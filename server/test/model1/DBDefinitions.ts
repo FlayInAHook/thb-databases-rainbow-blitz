@@ -21,7 +21,7 @@ const userSchema = new Schema<TUser>({
   isDev: {type: Boolean, required: true}
 });
 
-export const User = model<TUser>("User", userSchema);
+export const User = model<TUser>("User1", userSchema);
 
 export type TGhostData = {
   levelID: number;
@@ -31,9 +31,9 @@ export type TGhostData = {
 
 const ghostDataSchema = new Schema<TGhostData>({
   levelID: {type: Number, required: true},
-  userID: {type: Schema.Types.ObjectId, ref: "User"},
+  userID: {type: Schema.Types.ObjectId, ref: "User1"},
   levelData: {type: Object, required: true}
 });
 
-export const GhostData = model<TGhostData>("GhostData", ghostDataSchema);
+export const GhostData = model<TGhostData>("GhostData1", ghostDataSchema);
 
