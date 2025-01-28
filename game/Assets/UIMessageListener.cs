@@ -83,7 +83,6 @@ public class UIMessageListener : MonoBehaviour
         //webViewPrefab.WebView.Resize(1980, 1080);
         webViewPrefab.WebView.MessageEmitted += (sender, eventArgs) =>
         {
-            Debug.Log("KEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSE");
             Debug.Log("Message received: " + eventArgs.Value);
             //webViewPrefab.WebView.PostMessage("{\"type\": \"greeting\", \"message\": \"Hello from C#!\"}");
             // eventArgs.Value is a json string and I want to get the value of the key "type" but the type is not known
