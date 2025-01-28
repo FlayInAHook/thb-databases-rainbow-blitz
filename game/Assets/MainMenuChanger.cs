@@ -8,6 +8,9 @@ public class MainMenuChanger : MonoBehaviour
     // Start is called before the first frame update
     async void Start()
     {
+        // wir benutzen das hier ganz dreckig für Initialisierungen... 
+        GameStateAlex.Init(transform);
+
         /*CanvasWebViewPrefab webViewPrefab = GetComponent<CanvasWebViewPrefab>();
         await webViewPrefab.WaitUntilInitialized();
         string url = webViewPrefab.WebView.Url;

@@ -27,12 +27,50 @@ public class UserLevelData
     public string ghostData;
 }
 
+public class GhostLevelData
+{
+    public int levelID;
+    public string ghostData;
+}
+
+public class MultiGhostDataEntry
+{
+    public string userID;
+    public MultiGhostDataEntryLevelData LevelData;
+}
+
+public class MultiGhostDataEntryLevelData
+{
+    public int timeInMS;
+    public string ghostData;
+}
+
+
+[System.Serializable]
+public class Root
+{
+    public string levelID;
+    public GhostData[] ghostData;
+}
+
+[System.Serializable]
+public class GhostData
+{
+    public string userID;
+    public LevelData levelData;
+}
+
+[System.Serializable]
+public class LevelData
+{
+    public int timeInMS;
+    public string ghostData;
+}
+
 
 public class UIMessageListener : MonoBehaviour
 {
     // Start is called before the first frame update
-
-    GameObject? GhostPrefab;
 
     private CanvasWebViewPrefab webViewPrefab;
     async void Start()
@@ -42,39 +80,10 @@ public class UIMessageListener : MonoBehaviour
         Debug.Log("WebviewPrefab found: " + webViewPrefab);
         await webViewPrefab.WaitUntilInitialized();
 
-        SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
-        {
-            if (this.IsDestroyed())
-            {
-                return;
-            }
-            var character = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "Character");
-            var levelManager = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "LevelManager");
-
-            if (character != null && levelManager != null)
-            {
-                var logger = character.AddComponent<PlayerPositionLogger>();
-                logger.DatabasePosterBehaviour = levelManager.GetComponent<IDatabasePoster>() as MonoBehaviour;
-            }
-            Object ghostPrefabObject = Resources.Load("GhostPrefab");
-            GhostPrefab = ghostPrefabObject as GameObject;
-
-            // Optionally, set the parent of the new GameObject
-            GhostPrefab.transform.SetParent(transform);
-
-            //if (GhostInfoByLevel.TryGetValue(StaticInfo.GetLevelID(), out var ghostInfo))
-            //{
-            //    var ghost = GhostPrefab.GetComponent<Ghost>();
-            //        if (ghost is { })
-            //        {
-            //            ghost.LoadData(ghostInfo);
-            //        }
-            //}
-        };
-
         //webViewPrefab.WebView.Resize(1980, 1080);
         webViewPrefab.WebView.MessageEmitted += (sender, eventArgs) =>
         {
+            Debug.Log("KEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSEKEKSE");
             Debug.Log("Message received: " + eventArgs.Value);
             //webViewPrefab.WebView.PostMessage("{\"type\": \"greeting\", \"message\": \"Hello from C#!\"}");
             // eventArgs.Value is a json string and I want to get the value of the key "type" but the type is not known
@@ -123,7 +132,7 @@ public class UIMessageListener : MonoBehaviour
                     var userLevelData = JsonUtility.FromJson<UserLevelData>(ghostDataMessage.content);
                     Debug.Log("Received user level data: " + userLevelData.levelID + " " + userLevelData.ghostData);
                     GhostInfoByLevel[userLevelData.levelID.ToString()] = userLevelData.ghostData;
-                    if (GhostPrefab is { } gp)
+                    if (Ghost.GhostPrefab is { } gp)
                     {
                         var ghostInstance = GameObject.Instantiate(gp);
                         if (ghostInstance.GetComponent<Ghost>() is { } ghost)
@@ -133,16 +142,37 @@ public class UIMessageListener : MonoBehaviour
                     }
                 }
             }
+            if (message.type == "GHOST_LEVEL_DATA")
+            {
+
+                var ghostDataMessage = JsonUtility.FromJson<GhostDataMessage>(eventArgs.Value);
+                if (ghostDataMessage.type == "GHOST_LEVEL_DATA")
+                {
+                    Root root = JsonUtility.FromJson<Root>(ghostDataMessage.content);
+
+
+                    Debug.Log("Received ghost level data: " + root.levelID + " - " + root.ghostData.Length);
+                    if (Ghost.GhostPrefab is { } gp)
+                    {
+                        foreach (var ghostData in root.ghostData)
+                        {
+                            //if (!GhostInfoByLevelMulti.TryGetValue(ghostData.levelID.ToString(), out var ghosts))
+                            //{
+                            //    GhostInfoByLevelMulti[ghostData.levelID.ToString()] = new();
+                            //}
+
+                            var ghostInstance = GameObject.Instantiate(gp);
+                            if (ghostInstance.GetComponent<Ghost>() is { } ghost)
+                            {
+                                ghost.LoadData(ghostData.levelData.ghostData);
+                            }
+                        }
+                    }
+                }
+            }
         };
     }
 
-
-
     private static Dictionary<string, string> GhostInfoByLevel = new();
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    //private static Dictionary<string, List<string>> GhostInfoByLevelMulti = new();
 }

@@ -130,3 +130,17 @@ C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), for
 [0116/205906.053:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
 [0116/205906.054:ERROR:shared_image_manager.cc(225)] SharedImageManager::ProduceSkia: Trying to Produce a Skia representation from a non-existent mailbox.
 [0117/000402.329:WARNING:net_errors_win.cc(119)] Unknown error 10055 mapped to net::ERR_FAILED
+[0128/200158.096:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(130,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0128/200456.742:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(139,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0128/200456.878:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0128/200901.741:WARNING:angle_platform_impl.cc(49)] HLSLCompiler.cpp:250 (rx::HLSLCompiler::compileToBinary): 
+C:\fakepath(142,3-70): warning X3557: loop only executes for 1 iteration(s), forcing loop to unroll
+
+[0128/205225.156:WARNING:task_impl.cc(32)] No task runner for threadId 0
+[0128/211709.617:WARNING:task_impl.cc(32)] No task runner for threadId 0

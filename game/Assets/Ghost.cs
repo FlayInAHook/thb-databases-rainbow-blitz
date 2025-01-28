@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class Ghost : MonoBehaviour
 {
 
+    public static GameObject GhostPrefab;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {       
@@ -42,7 +44,6 @@ public class Ghost : MonoBehaviour
     Stack<string[]> Infos;
     (bool Valid, string[] parts, float Time, Vector3 Position, Quaternion Orientation) Current;
     bool Stopped = false;
-
     // Update is called once per frame
     void Update()
     {

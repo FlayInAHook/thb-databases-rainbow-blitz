@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements.InputSystem;
 using Vuplex.WebView;
+using Object = UnityEngine.Object;
 
 public interface IDatabasePoster
 {
@@ -15,15 +18,54 @@ public interface IDatabasePoster
     void RegisterFinishedNotification(Action<string> finishedAction);
 }
 
+public static class GameStateAlex
+{
+    private static bool Inited;
+    public static void Init(Transform transform)
+    {
+        if (Inited) return;
+        Inited = true;
+
+        var transformCopy = transform.Clone<Transform>(null, false);
+        SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
+        {
+            var character = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "Character");
+            var levelManager = scene.GetRootGameObjects().FirstOrDefault(go => go.name == "LevelManager");
+
+            if (character != null && levelManager != null)
+            {
+                var logger = character.AddComponent<PlayerPositionLogger>();
+                logger.DatabasePosterBehaviour = levelManager.GetComponent<IDatabasePoster>() as MonoBehaviour;
+            }
+            Object ghostPrefabObject = Resources.Load("GhostPrefab");
+            Ghost.GhostPrefab = ghostPrefabObject as GameObject;
+
+            // TODO wir brauchen evtl. nen Transform...
+            //Ghost.GhostPrefab.transform.SetParent(character.transform);
+            
+
+            //if (GhostInfoByLevel.TryGetValue(StaticInfo.GetLevelID(), out var ghostInfo))
+            //{
+            //    var ghost = GhostPrefab.GetComponent<Ghost>();
+            //        if (ghost is { })
+            //        {
+            //            ghost.LoadData(ghostInfo);
+            //        }
+            //}
+        };
+    }
+}
+
 public class LevelManager : MonoBehaviour, IDatabasePoster
 {
 
     public void RegisterFinishedNotification(Action<string> finishedAction)
     {
+        Debug.Log("REGISTERFINISHEDNOTIFICATION   999");
         FinishedAction = finishedAction;
     }
 
-    private Action<string>? FinishedAction;
+    private Action<string> FinishedAction;
     GameObject hotbarContainer;
     public GameObject canvasWebViewPrefab;
     private static GameObject ingameOverlay;
@@ -60,7 +102,6 @@ public class LevelManager : MonoBehaviour, IDatabasePoster
         //Input.ResetInputAxes();
         //InputManager.instance.afterFirstFrame = false;
         //InputManager.instance.enabled = false;
-
     }
 
     const int updatesToWait = 3;

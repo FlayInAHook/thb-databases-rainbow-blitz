@@ -2,3 +2,6 @@
 **/*.txt~
 game/Assets/Vuplex/WebView/Standalone/Windows/Plugins/VuplexWebViewChromium/log-chromium.txt~
 game/UserSettings/Layouts/default-6000.dwlt
+game/Assets/Vuplex/WebView/Standalone/Windows/Plugins/VuplexWebViewChromium/debug.log
+game/Assets/Vuplex/WebView/Standalone/Windows/Plugins/VuplexWebViewChromium/log-chromium.txt~
+game/UserSettings/Layouts/default-6000.dwlt
