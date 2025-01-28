@@ -1,4 +1,5 @@
 import Elysia, { t } from 'elysia';
+import { Schema } from 'mongoose';
 import { TLevelData, TUser, User } from "./DBDefinitions";
 import { addGhostData } from './GhostData';
 
@@ -12,6 +13,14 @@ export async function registerCompleteUser(registeringUser: TUser) {
   return await user.save();
 }
 
+export async function updateFullLevelData(uniqueID: Schema.Types.ObjectId, levelData: Record<number, TLevelData>) { 
+  const user = await User.findById(uniqueID);
+  if (!user) {
+    throw new Error("User not found " + uniqueID);
+  }
+  user.levelData = levelData;
+  return await user.save();
+}
 
 export async function updateScore(uniqueID: string, level: number, timeInMS: number) {
   const user = await User.findOne({
@@ -32,7 +41,6 @@ export async function updateScore(uniqueID: string, level: number, timeInMS: num
 }
 
 export async function updateGhostData(uniqueID: string, level: number, ghostData: any) {
-  console.log("updateGhostData", ghostData);
   const user = await User.findOne({
     uniqueID
   });

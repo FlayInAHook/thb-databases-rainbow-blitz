@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { Document, Types } from 'mongoose';
+import { AMOUNT_OF_GHOSTS, AMOUNT_OF_USERS } from '..';
 import { TUser } from "./DBDefinitions";
 import { addGhostData } from './GhostData';
 import { registerCompleteUser } from './User';
@@ -43,32 +44,29 @@ type User = Document<unknown, {}, TUser> & TUser & {
   __v: number;
 }
 
-function generateFakeGhostData(users: User[]) {
+function generateFakeGhostData(users: User[], amountOfGhosts: number) {
   let promises: Promise<any>[] = [];
   for (const user of users) {
     for (const levelID in user.levelData) {
-      promises.push(addGhostData(user.id, Number(levelID), user.levelData[levelID].ghostData!, user.levelData[levelID].timeInMS!));
-      promises.push(addGhostData(user.id, Number(levelID), user.levelData[levelID].ghostData!+ "EXTRA W/E" , user.levelData[levelID].timeInMS! + 1000));
-      promises.push(addGhostData(user.id, Number(levelID), user.levelData[levelID].ghostData!+ "EXTRA W/E EXTRA W/E" , user.levelData[levelID].timeInMS! + 2000));
+      for (let i = 0; i < amountOfGhosts; i++) {
+        promises.push(addGhostData(user.id, Number(levelID), user.levelData[levelID].ghostData! + "EXTRA W/E".repeat(i), user.levelData[levelID].timeInMS! + 1000 * i));
+      }
     }
   }
   return promises;
 }
 
 
+
+
 export async function generateFakeData1(){
   console.log("Generating Fake Data");
-  const users = generateFakeUsers(1000);
+  const users = generateFakeUsers(AMOUNT_OF_USERS);
   //console.log("Generated Fake Users", users[0]);
   console.log("Saving Fake Users");
   const newUsers = await Promise.all(users.map(user => registerCompleteUser(user)));
 
-  const promises: Promise<any>[] = generateFakeGhostData(newUsers);
-
- 
-
+  const promises: Promise<any>[] = generateFakeGhostData(newUsers, AMOUNT_OF_GHOSTS);
 
   return Promise.all(promises);
-
-
 }
