@@ -63,6 +63,9 @@ const IngameOverlay: React.FC = () => {
     fetchUser(uniqueID).then((user) => {
       setUser(Object.keys(user).length == 0 ? null : user);
       console.log("got user User", user, Object.keys(user).length);
+      if (levelID) {
+        setOldTime(getUserHighscoreOrInfinity(user, levelID));
+      }
     });
     sendGhostDataToUnity();
   }, [uniqueID]);
@@ -92,9 +95,10 @@ const IngameOverlay: React.FC = () => {
     if (levelID != 1){
       const content = {
         levelID: levelID,
-        ghostData: user?.levelData[levelID]?.ghostData,
+        ghostData: user?.levelData?.[levelID]?.ghostData,
       }
       console.log("Sending USER_LEVEL_DATA", content);
+      if(!content.ghostData) return;
   
       sendMessageToUnity({type: "USER_LEVEL_DATA", content: JSON.stringify(content)});
     } else {
@@ -117,7 +121,7 @@ const IngameOverlay: React.FC = () => {
     const event = JSON.parse(_event.data) as UnityMessage;
     if (event.type === "FINISHED_LEVEL") {
       console.log("Finished Level", event);
-      setTime(event.data.time);
+      /*setTime(event.data.time);
       setLevelID(event.data.levelID);
       setOldTime(getUserHighscoreOrInfinity(user, event.data.levelID));
       //console.log(event.data.time, event.data.levelID, user);
@@ -131,7 +135,7 @@ const IngameOverlay: React.FC = () => {
         saveNewHighscore(user.uniqueID, Number(event.data.levelID), Number(event.data.time)).then((newUser) => {
           setUser(newUser);
         });
-      }
+      }*/
     }
     if (event.type === "LEVEL_ID") {
       setLevelID(event.data.levelID);
@@ -155,10 +159,38 @@ const IngameOverlay: React.FC = () => {
     if (event.type == "LEVEL_TRACE") {
       console.log("LEVEL_TRACE", event);
       if (!user) return;
-      saveGhostData(user.uniqueID, Number(event.data.levelID), event.data.log, Number(event.data.time)).then((newUser) => {
+      receivedLevelGhostAndTime(Number(event.data.levelID), event.data.log, Number(event.data.time));
+      /*saveGhostData(user.uniqueID, Number(event.data.levelID), event.data.log, Number(event.data.time)).then((newUser) => {
         setUser(newUser);
-      });
+      });*/
     }
+  }
+
+  function receivedLevelGhostAndTime(levelID: number, ghostData: string, time: number) {
+    console.log("Received Ghost Data", levelID, ghostData, time);
+    setTime(time);
+    setLevelID(levelID);
+    setOldTime(getUserHighscoreOrInfinity(user, levelID));
+    setRestart(false);
+    getAllLeaderboards().then((leaderboards) => {
+      setLeaderboards(leaderboards);
+    });
+  
+    if (!user) return;
+    saveGhostData(user.uniqueID, levelID, ghostData, time).then((newUser) => {
+      if (time < getUserHighscoreOrInfinity(user, levelID)) {
+        console.log("user", user);
+        saveNewHighscore(user.uniqueID, levelID, time).then((newUser) => {
+          setUser(newUser);
+          getAllLeaderboards().then((leaderboards) => {
+            setLeaderboards(leaderboards);
+          });
+        });
+      }
+    });
+      /*saveNewHighscore(user.uniqueID, Number(levelID), Number(time)).then((newUser) => {
+        setUser(newUser);
+      });*/
   }
 
   function renderTime(){
