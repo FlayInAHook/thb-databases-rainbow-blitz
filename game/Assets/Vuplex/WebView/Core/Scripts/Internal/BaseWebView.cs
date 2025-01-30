@@ -874,7 +874,7 @@ namespace Vuplex.WebView.Internal {
                 #if UNITY_2019_3_OR_NEWER
                     ["Rendering threading mode"] = SystemInfo.renderingThreadingMode,
                 #endif
-                    ["Render pipeline"] = GraphicsSettings.renderPipelineAsset?.ToString() ?? "default",
+                    ["Render pipeline"] = GraphicsSettings.defaultRenderPipeline?.ToString() ?? "default",
                 #if UNITY_2018_2_OR_NEWER
                     ["SRP Batcher"] = GraphicsSettings.useScriptableRenderPipelineBatching,
                 #endif

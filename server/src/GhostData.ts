@@ -46,15 +46,15 @@ ghostRoutes.get("/ghostData/:levelID", async ({params: {levelID}}) => {
       }
     },
     {
+      $limit: 5
+    },
+    {
       $replaceRoot: {
         newRoot: {
           userID: "$_id",
           levelData: "$levelData"
         }
       }
-    },
-    {
-      $limit: 1
     }
   ]);
   return result;
