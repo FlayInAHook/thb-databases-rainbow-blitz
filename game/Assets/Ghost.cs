@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
@@ -32,11 +33,11 @@ public class Ghost : MonoBehaviour
 
     public void LoadData(string data)
     {
-        Infos = new(data.Split(@"END", StringSplitOptions.RemoveEmptyEntries).Reverse().Select(s => s.Split(" ")));
+        Infos = new(data.Split(@"END", StringSplitOptions.RemoveEmptyEntries).Reverse().Select(s => s.Replace(',', '.').Split(" ")));
 
         if (Infos.TryPeek(out var first))
         {
-            StartTime = float.Parse(first[0]);
+            StartTime = float.Parse(first[0], CultureInfo.InvariantCulture);
         }   
     }
 
@@ -63,9 +64,9 @@ public class Ghost : MonoBehaviour
         {
             if (Infos?.TryPop(out var info) ?? false)
             {
-                var time = float.Parse(info[0]) - StartTime;
-                var position = new Vector3(float.Parse(info[1]), float.Parse(info[2]), float.Parse(info[3]));
-                var orientation = new Quaternion(float.Parse(info[4]), float.Parse(info[5]), float.Parse(info[6]), float.Parse(info[7]));
+                var time = float.Parse(info[0], CultureInfo.InvariantCulture) - StartTime;
+                var position = new Vector3(float.Parse(info[1], CultureInfo.InvariantCulture), float.Parse(info[2], CultureInfo.InvariantCulture), float.Parse(info[3], CultureInfo.InvariantCulture));
+                var orientation = new Quaternion(float.Parse(info[4], CultureInfo.InvariantCulture), float.Parse(info[5], CultureInfo.InvariantCulture), float.Parse(info[6], CultureInfo.InvariantCulture), float.Parse(info[7], CultureInfo.InvariantCulture));
                 Current = (true, info, time, position, orientation);
 
             }
