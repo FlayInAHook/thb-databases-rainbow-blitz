@@ -41,6 +41,9 @@ public class PlayerSkills : MonoBehaviour
     private MeshColorChanger ammoDisplayColorChanger;
 
     private LevelManager levelManager;
+
+    public AudioSource skill1AS;
+    public AudioSource skill2AS;
     
 
     void Start()
@@ -156,6 +159,8 @@ public class PlayerSkills : MonoBehaviour
         CancelAllSkills();
         if (skillCounts.ContainsKey(skill) && skillCounts[skill] > 0)
         {
+            skill1AS.Play();
+
             skillCounts[skill]--; // Decrement the count for the used skill
             switch (skill)
             {
@@ -189,6 +194,8 @@ public class PlayerSkills : MonoBehaviour
       Skill skill = skillDatabase.GetSkill(skillType);
       if (skillAmmo.ContainsKey(skillType) && skillAmmo[skillType] > 0)
       {
+        skill2AS.Play();
+
         skillAmmo[skillType]--;
         switch (skill.gunType)
         {
